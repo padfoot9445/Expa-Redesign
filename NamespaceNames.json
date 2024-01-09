@@ -1,0 +1,6 @@
+{
+    "Lexer": "Lexer",
+    "LexerConstants": "Lexer.Constants",
+    "Tokens": "Tokens",
+    "TokenTypes": "Tokens.TokenTypes"
+}
