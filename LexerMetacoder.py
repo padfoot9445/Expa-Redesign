@@ -6,6 +6,8 @@ with open(r"D:\coding\c#\Expa V4\Expa-Redesign\ClassNames.json", "r") as class_n
     class_names_dict: dict[str,str] = json.load(class_names)
 with open(r"D:\coding\c#\Expa V4\Expa-Redesign\Keywords.json", "r") as keywords:
     keywords_dict: dict[str,dict[str, str | list[int]]] = json.load(keywords)
+with open(r"D:\coding\c#\Expa V4\Expa-Redesign\Exceptions.json", "r") as exceptions:
+    exceptions_dict: dict[str, list[str]] = json.load(exceptions)
     
 def value_dict_to_TokenType_accessor(value:dict[str, str | list[int]]):
     return f"{class_names_dict["TokenTypes"]}.{value["name"].upper()}"
@@ -23,11 +25,11 @@ internal class {class_names_dict["Lexer"]} : {f'I{class_names_dict["Lexer"]}'}
     private int Start{{ get; set; }} = 0;
     private int Line{{ get; set; }} = 0;
     private string Code{{ get; init;}}
-    private readonly List<IExpaException> NonLethalExceptions = new();
+    private readonly List<ExpaException> NonLethalExceptions = new();
     private delegate Token? ProcessDefaultFunction();
     private static ProcessDefaultFunction[] ProcessDefaultFunctions {{ get; set; }} = Array.Empty<ProcessDefaultFunction>();
     private Dictionary<string, {class_names_dict["TokenTypes"]}> __KeywordsToTokenType = new(){{}};
-    private {class_names_dict["TokenTypes"]} KeywordToTokenType(string Keyword) => __KeywordsToTokenType.TryGetValue(Keyword, out {class_names_dict["TokenTypes"]} TT) TT : {value_dict_to_TokenType_accessor(keywords_dict["InterpreterIdentifier"])};
+    private {class_names_dict["TokenTypes"]} KeywordToTokenType(string Keyword) => __KeywordsToTokenType.TryGetValue(Keyword, out {class_names_dict["TokenTypes"]} TT)? TT : {value_dict_to_TokenType_accessor(keywords_dict["InterpreterIdentifier"])};
     public {class_names_dict["Lexer"]}(string code)
     {{
         Code = code;
@@ -68,7 +70,7 @@ internal class {class_names_dict["Lexer"]} : {f'I{class_names_dict["Lexer"]}'}
                     }}
                     if(nullCount == 3)
                     {{
-                        NonLethalExceptions.Add(new ExpaParseError(Line, $"Illegal character {{Code[Current]}}"));
+                        NonLethalExceptions.Add(new ExpaParseError($"Illegal character {{Code[Current]}}", Line));
                     }}
                     break;
 
@@ -105,7 +107,7 @@ internal class {class_names_dict["Lexer"]} : {f'I{class_names_dict["Lexer"]}'}
             {{
                 if(hasDot)
                 {{
-                    NonLethalExceptions.Add(new ExpaNumberError(Line, "Invalid number: number cannot have two decimal points"));
+                    NonLethalExceptions.Add(new ExpaNumberError("Invalid number: number cannot have two decimal points", Line));
                 }}
                 hasDot = true;
                 Current++;
@@ -114,7 +116,7 @@ internal class {class_names_dict["Lexer"]} : {f'I{class_names_dict["Lexer"]}'}
         }}
         if(lastDot)
         {{
-            Throw(new ExpaNumberError(Line, "Invalid number: number must not end on a decimal point"));
+            Throw(new ExpaNumberError("Invalid number: number must not end on a decimal point", Line));
         }}
         return new({class_names_dict["TokenTypes"]}.{keywords_dict["InterpreterNumber"]["name"].upper()}, Code[Start..Current], Line);
     }}
@@ -154,14 +156,16 @@ internal class {class_names_dict["Lexer"]} : {f'I{class_names_dict["Lexer"]}'}
     }}
     #endregion
     #region Throw
-    private void Throw(ExpaSyntaxException exception)
+    private void Throw(ExpaException exception)
     {{
         StringBuilder ov = new();  
-        foreach(ExpaSyntaxException i in NonLethalExceptions)
+        foreach(ExpaException i in NonLethalExceptions)
         {{
             ov.Append(i.Message);
             ov.Append(\"\\n * \\n\");
         }}
+        Console.WriteLine(ov.ToString());
+        throw exception;
     }}
     #endregion
 }}
@@ -212,7 +216,27 @@ interface ILexer
 }}
 """
 )
-for fp, var in [("Lexer.cs", LexerFile), ("Token.cs", TokenFile), ("TokenTypes.cs", TTFile), ("ILexer.cs", ILexerFile)]:
+
+ExceptionsFile: str = (
+f"""
+namespace Exceptions;
+
+abstract class ExpaException : System.Exception
+{{
+    private protected ExpaException(string message, int line, string name): base($"{{name}} at line {{line}}: \\n {{message}}") {{ }}
+}}
+class ExpaEOFException(int line) : ExpaException("Unexpected end of file or input stream", line, name)
+{{
+    private const string name = "ExpaEOFException";
+}}
+{
+    "\n".join(
+        f"class {k} : {', '.join(e for e in v )} \n{{\n\tprivate const string Name = \"{k}\"; \n\tpublic {k}(string message, int line) : base(message, line, Name){{ }}\n\tprivate protected {k}(string message, int line, string childName): base(message, line, childName){{ }}\n}}" for k, v in exceptions_dict.items()
+    )
+}
+"""
+)
+for fp, var in [("Lexer.cs", LexerFile), ("Token.cs", TokenFile), ("TokenTypes.cs", TTFile), ("ILexer.cs", ILexerFile), ("Exceptions.cs", ExceptionsFile)]:
     with open(fp, "w") as f:
         f.write(var)
 
