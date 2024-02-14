@@ -1,0 +1,4 @@
+private static ProcessDefaultFunction[] ProcessDefaultFunctions { get; set; } = Array.Empty<ProcessDefaultFunction>();
+private static ProcessDefaultFunction[] ProcessDefaultFunctions { get; set; } = Array.Empty<ProcessDefaultFunction>();
+ProcessDefaultFunctions = [ProcessNum, ProcessString, ProcessIdentifier];
+ProcessDefaultFunctions = [ProcessNum, ProcessString, ProcessIdentifier];

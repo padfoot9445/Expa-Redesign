@@ -1,0 +1,6 @@
+{
+    "ExpaSyntaxException": ["ExpaException"],
+    "ExpaParseError": ["ExpaException"],
+    "ExpaLiteralError": ["ExpaSyntaxException"],
+    "ExpaNumberError": ["ExpaLiteralError"]
+}

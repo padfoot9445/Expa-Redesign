@@ -1,5 +1,8 @@
 {
     "int": {"name": "int", "types":[1, 11, 111]},
     "+": {"name": "plus", "types":[2, 21]},
-    "-": {"name": "minus", "types":[2, 21]}
+    "-": {"name": "minus", "types":[2, 21]},
+    "InterpreterIdentifier": {"name": "Identifier", "types": []},
+    "InterpreterNumber": {"name": "Number", "types": []},
+    "InterpreterString": {"name": "String", "types": []}
 }

@@ -17,24 +17,9 @@ namespace {namespace_names_dict["Lexer"]};
 using {namespace_names_dict["Tokens"]};
 using {namespace_names_dict["TokenTypes"]};
 using {namespace_names_dict["Exceptions"]};
-using System.Text;
 
-internal class {class_names_dict["Lexer"]} : {f'I{class_names_dict["Lexer"]}'}
+internal partial class {class_names_dict["Lexer"]} : {f'I{class_names_dict["Lexer"]}'}
 {{
-    private int Current{{ get; set; }} = 0;
-    private int Start{{ get; set; }} = 0;
-    private int Line{{ get; set; }} = 0;
-    private string Code{{ get; init;}}
-    private readonly List<ExpaException> NonLethalExceptions = new();
-    private delegate Token? ProcessDefaultFunction();
-    private static ProcessDefaultFunction[] ProcessDefaultFunctions {{ get; set; }} = Array.Empty<ProcessDefaultFunction>();
-    private Dictionary<string, {class_names_dict["TokenTypes"]}> __KeywordsToTokenType = new(){{}};
-    private {class_names_dict["TokenTypes"]} KeywordToTokenType(string Keyword) => __KeywordsToTokenType.TryGetValue(Keyword, out {class_names_dict["TokenTypes"]} TT)? TT : {value_dict_to_TokenType_accessor(keywords_dict["InterpreterIdentifier"])};
-    public {class_names_dict["Lexer"]}(string code)
-    {{
-        Code = code;
-        ProcessDefaultFunctions = [ProcessNum, ProcessString, ProcessIdentifier];
-    }}
     #region
     public List<{class_names_dict["Token"]}> Lex()
     {{
@@ -58,7 +43,7 @@ internal class {class_names_dict["Lexer"]} : {f'I{class_names_dict["Lexer"]}'}
             } 
                 default:
                     int nullCount = 0;
-                    foreach(var i in ProcessDefaultFunctions)
+                    foreach(var i in __ProcessDefaultFunctions)
                     {{    
                         Token? token = i();
                         if(token is not null)
@@ -76,96 +61,6 @@ internal class {class_names_dict["Lexer"]} : {f'I{class_names_dict["Lexer"]}'}
 
             }}
         }}
-    }}
-    #endregion
-    #region ThrowExceptionIfAtEnd
-    private void ThrowExceptionIfAtEnd()
-    {{
-        if(Current == Code.Length)
-        {{
-            Throw(new ExpaEOFException(Line));
-        }}
-    }}
-    #endregion
-    #region ProcessNum
-    private Token? ProcessNum()
-    {{
-        if(!char.IsNumber(Code[Current]))
-        {{
-            return null;
-        }}
-        Current++;
-        bool hasDot = false;
-        bool lastDot = false;
-        while(char.IsNumber(Code[Current]) || Code[Current] == '.' || Code[Current] == ',')
-        {{
-            if(lastDot)
-            {{
-                lastDot = false;
-            }}
-            if(Code[Current] == '.')
-            {{
-                if(hasDot)
-                {{
-                    NonLethalExceptions.Add(new ExpaNumberError("Invalid number: number cannot have two decimal points", Line));
-                }}
-                hasDot = true;
-                Current++;
-            }}
-            ThrowExceptionIfAtEnd();
-        }}
-        if(lastDot)
-        {{
-            Throw(new ExpaNumberError("Invalid number: number must not end on a decimal point", Line));
-        }}
-        return new({class_names_dict["TokenTypes"]}.{keywords_dict["InterpreterNumber"]["name"].upper()}, Code[Start..Current], Line);
-    }}
-    #endregion
-
-    #region ProcessString
-    private Token? ProcessString()
-    {{
-        if(Code[Current] != '"')
-        {{
-            return null;
-        }}
-        Current++;
-        while(Code[Current] != '"')
-        {{
-            Current++;
-        }}
-        return new({value_dict_to_TokenType_accessor(keywords_dict["InterpreterString"])}, Code[Start..Current], Line);
-    }}
-    #endregion
-
-    #region ProcessIdentifier
-    private Token? ProcessIdentifier()
-    {{
-        if(!(Code[Current] == '_' || char.IsLetter(Code[Current])))
-        {{
-            return null;
-        }}
-        while(Code[Current] == '_' || char.IsLetterOrDigit(Code[Current]))
-        {{
-            Current++;
-            ThrowExceptionIfAtEnd();
-        }}
-        
-        //check if Identifier
-        return new(KeywordToTokenType(Code[Start..Current]), Code[Start..Current], Line);
-    }}
-    #endregion
-    #region Throw
-    private void Throw(ExpaException exception)
-    {{
-        StringBuilder ov = new();  
-        foreach(ExpaException i in NonLethalExceptions)
-        {{
-            ov.Append(i.Message);
-            ov.Append(\"\\n * \\n\");
-        }}
-        Console.WriteLine(ov.ToString());
-        throw exception;
     }}
     #endregion
 }}
@@ -236,7 +131,7 @@ class ExpaEOFException(int line) : ExpaException("Unexpected end of file or inpu
 }
 """
 )
-for fp, var in [("Lexer.cs", LexerFile), ("Token.cs", TokenFile), ("TokenTypes.cs", TTFile), ("ILexer.cs", ILexerFile), ("Exceptions.cs", ExceptionsFile)]:
+for fp, var in [("Lexer.Lex.cs", LexerFile), ("Token.cs", TokenFile), ("TokenTypes.cs", TTFile), ("ILexer.cs", ILexerFile), ("Exceptions.cs", ExceptionsFile)]:
     with open(fp, "w") as f:
         f.write(var)
 
