@@ -1,4 +1,3 @@
-
 namespace Lexer;
 using Tokens;
 interface ILexer

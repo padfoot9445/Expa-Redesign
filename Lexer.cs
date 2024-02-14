@@ -5,7 +5,6 @@ using Tokens.TokenTypes;
 using System.Text;
 internal partial class Lexer: ILexer
 {
-    
     private int Current{ get; set; } = 0;
     private int Start{ get; set; } = 0;
     private int Line{ get; set; } = 0;
@@ -115,14 +114,7 @@ internal partial class Lexer: ILexer
     #region Throw
     private void Throw(ExpaException exception)
     {
-        StringBuilder ov = new();  
-        foreach(ExpaException i in NonLethalExceptions)
-        {
-            ov.Append(i.Message);
-            ov.Append("\n * \n");
-        }
-        Console.WriteLine(ov.ToString());
-        throw exception;
+        throw new ExpaFatalException(exception, NonLethalExceptions);
     }
     #endregion
 }

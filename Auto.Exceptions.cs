@@ -1,14 +1,4 @@
-
 namespace Exceptions;
-
-abstract class ExpaException : System.Exception
-{
-    private protected ExpaException(string message, int line, string name): base($"{name} at line {line}: \n {message}") { }
-}
-class ExpaEOFException(int line) : ExpaException("Unexpected end of file or input stream", line, name)
-{
-    private const string name = "ExpaEOFException";
-}
 class ExpaSyntaxException : ExpaException 
 {
 	private const string Name = "ExpaSyntaxException"; 

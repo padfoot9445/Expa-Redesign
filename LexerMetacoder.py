@@ -67,23 +67,7 @@ internal partial class {class_names_dict["Lexer"]} : {f'I{class_names_dict["Lexe
 """
 )
 
-TokenFile: str = (
-f"""
-namespace {namespace_names_dict["Tokens"]};
-using {namespace_names_dict["TokenTypes"]};
-public class {class_names_dict['Token']}
-{{
-    public {class_names_dict['TokenTypes']} TokenType {{ get; init; }}
-    public string Lexeme {{ get; init; }}
-    public int Line {{ get; init; }}
-    public {class_names_dict['Token']}({class_names_dict['TokenTypes']} TT, string lexeme, int line)
-    {{
-        TokenType = TT;
-        Lexeme = lexeme;
-        Line = line;
-    }}
-}}
-""")
+
 
 TTFile: str = (
 f"""
@@ -101,29 +85,10 @@ enum {class_names_dict['TokenTypes']}
 """
 )
 
-ILexerFile: str = (
-f"""
-namespace {namespace_names_dict['Lexer']};
-using {namespace_names_dict['Tokens']};
-interface ILexer
-{{
-    public List<Token> Lex();
-}}
-"""
-)
 
 ExceptionsFile: str = (
 f"""
 namespace Exceptions;
-
-abstract class ExpaException : System.Exception
-{{
-    private protected ExpaException(string message, int line, string name): base($"{{name}} at line {{line}}: \\n {{message}}") {{ }}
-}}
-class ExpaEOFException(int line) : ExpaException("Unexpected end of file or input stream", line, name)
-{{
-    private const string name = "ExpaEOFException";
-}}
 {
     "\n".join(
         f"class {k} : {', '.join(e for e in v )} \n{{\n\tprivate const string Name = \"{k}\"; \n\tpublic {k}(string message, int line) : base(message, line, Name){{ }}\n\tprivate protected {k}(string message, int line, string childName): base(message, line, childName){{ }}\n}}" for k, v in exceptions_dict.items()
@@ -131,7 +96,7 @@ class ExpaEOFException(int line) : ExpaException("Unexpected end of file or inpu
 }
 """
 )
-for fp, var in [("Lexer.Lex.cs", LexerFile), ("Token.cs", TokenFile), ("TokenTypes.cs", TTFile), ("ILexer.cs", ILexerFile), ("Exceptions.cs", ExceptionsFile)]:
+for fp, var in [("Auto.Lexer.cs", LexerFile), ("TokenTypes.cs", TTFile), ("Auto.Exceptions.cs", ExceptionsFile)]:
     with open(fp, "w") as f:
         f.write(var)
 
