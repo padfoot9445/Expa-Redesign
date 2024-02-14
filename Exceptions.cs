@@ -1,35 +1,17 @@
-
 namespace Exceptions;
-
 abstract class ExpaException : System.Exception
 {
-    private protected ExpaException(string message, int line, string name): base($"{name} at line {line}: \n {message}") { }
+    private static string FormatMessage(string message, int line, string name) => $"{name} at line {line}: \\n {message}";
+    private protected ExpaException(string message, int line, string name): base(FormatMessage(message, line, name)) { }
 }
 class ExpaEOFException(int line) : ExpaException("Unexpected end of file or input stream", line, name)
 {
     private const string name = "ExpaEOFException";
 }
-class ExpaSyntaxException : ExpaException 
+
+class ExpaFatalException: AggregateException//No need to inherit from ExpaException as you won't ever be passing this around
 {
-	private const string Name = "ExpaSyntaxException"; 
-	public ExpaSyntaxException(string message, int line) : base(message, line, Name){ }
-	private protected ExpaSyntaxException(string message, int line, string childName): base(message, line, childName){ }
-}
-class ExpaParseError : ExpaException 
-{
-	private const string Name = "ExpaParseError"; 
-	public ExpaParseError(string message, int line) : base(message, line, Name){ }
-	private protected ExpaParseError(string message, int line, string childName): base(message, line, childName){ }
-}
-class ExpaLiteralError : ExpaSyntaxException 
-{
-	private const string Name = "ExpaLiteralError"; 
-	public ExpaLiteralError(string message, int line) : base(message, line, Name){ }
-	private protected ExpaLiteralError(string message, int line, string childName): base(message, line, childName){ }
-}
-class ExpaNumberError : ExpaLiteralError 
-{
-	private const string Name = "ExpaNumberError"; 
-	public ExpaNumberError(string message, int line) : base(message, line, Name){ }
-	private protected ExpaNumberError(string message, int line, string childName): base(message, line, childName){ }
+    public ExpaFatalException(ExpaException MainFatalException, IEnumerable<ExpaException> NonFatalExceptions) =>
+        throw new AggregateException(MainFatalException.Message, NonFatalExceptions.Prepend(MainFatalException));
+    public ExpaFatalException(ExpaException MainFatalException, ExpaException NonFatalException) : this(MainFatalException, [NonFatalException]) { }
 }
