@@ -1,0 +1,4 @@
+- force negates: -true == false; -false == false;
+same for +
+List<[string]>
+! inverts: !true == false; !false == true; but also !-1 == 1; !1 == -1;(implicit comparison can be done with !(1) )
