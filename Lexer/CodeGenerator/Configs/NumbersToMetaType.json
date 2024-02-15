@@ -1,5 +1,29 @@
 {
+    "0": "InterpreterValues",
+
     "1": "type",
-    "11":"vartype",
-    "111": "numberType"
+        "1.1":"vartype",
+            "1.1.1": "numberType",
+            "1.1.2": "stringType",
+                "1.1.2.1": "charType",
+            "1.1.3": "booleanType",
+
+
+    "2": "symbol",
+        "2.1": "operator",
+            "2.1.1": "numberOperator",
+            "2.1.2": "valueOperator",
+            "2.1.3": "typekwModifierOperator",
+            "2.1.4": "binaryOperator",
+            "2.1.5": "tenaryOperator",
+            "2.1.6": "comparisonOperator",
+            "2.1.7": "booleanOperator",
+        "2.2": "brackets",
+            "2.2.1": "parenthesis",
+            "2.2.2": "index",
+            "2.2.3": "set",
+            "2.2.4": "generics",
+            "2.2.5": "interpolation"
+        
+
 }
