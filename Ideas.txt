@@ -2,3 +2,5 @@
 same for +
 List<[string]>
 ! inverts: !true == false; !false == true; but also !-1 == 1; !1 == -1;(implicit comparison can be done with !(1) )
+boolean operators are also binary operators apart from ! to avoid ambiguity between logical not of a number and inverting the number's sign
+binary operations with structs and classes act on all fields, and only work on the same type or overloaded

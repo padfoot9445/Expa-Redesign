@@ -12,8 +12,7 @@ internal partial class Lexer: ILexer
     private readonly List<ExpaException> NonLethalExceptions = new();
     private delegate Token? ProcessDefaultFunction();
     private static ProcessDefaultFunction[] __ProcessDefaultFunctions { get; set; } = Array.Empty<ProcessDefaultFunction>();
-    private Dictionary<string, TokenType> __KeywordsToTokenType = new(){};
-    private TokenType KeywordToTokenType(string Keyword) => __KeywordsToTokenType.TryGetValue(Keyword, out TokenType TT)? TT : TokenType.IDENTIFIER;
+    private TokenType KeywordToTokenType(string Keyword) => __KeywordsToTokenType(Keyword, out TokenType? TT)? (TokenType)TT! : TokenType.IDENTIFIER;//we know TT must not be null if KeywordsToTokenType returns true
     private List<Token> LexRV = [];
     public Lexer(string code)
     {

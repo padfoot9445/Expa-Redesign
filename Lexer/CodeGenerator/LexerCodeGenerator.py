@@ -1,5 +1,6 @@
 import json
 #forego constants file for just storing in json and python
+#TODO: Extra processing step to handle multi-character symbols
 with open(r"D:\coding\c#\Expa V4\Expa-Redesign\Lexer\CodeGenerator\Configs\NamespaceNames.json", "r") as namespace_names:
     namespace_names_dict:dict[str,str] = json.load(namespace_names)
 with open(r"D:\coding\c#\Expa V4\Expa-Redesign\Lexer\CodeGenerator\Configs\ClassNames.json", "r") as class_names:

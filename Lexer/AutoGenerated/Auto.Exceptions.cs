@@ -1,3 +1,4 @@
+
 namespace Exceptions;
 class ExpaSyntaxException : ExpaException 
 {

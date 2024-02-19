@@ -23,7 +23,9 @@
             "2.2.2": "index",
             "2.2.3": "set",
             "2.2.4": "generics",
-            "2.2.5": "interpolation"
+            "2.2.5": "interpolation",
+    "3": "value",
+        "3.1": "boolValue"
         
 
 }
