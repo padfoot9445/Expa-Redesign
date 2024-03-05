@@ -14,11 +14,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\coding\\c#\\Expa V4\\Expa-Redesign\\Expa V4.csproj",
+      "projectUniqueName": "d:\\coding\\c#\\Expa V4\\Expa-Redesign\\Expa V4.csproj",
       "projectName": "Expa V4",
-      "projectPath": "D:\\coding\\c#\\Expa V4\\Expa-Redesign\\Expa V4.csproj",
+      "projectPath": "d:\\coding\\c#\\Expa V4\\Expa-Redesign\\Expa V4.csproj",
       "packagesPath": "C:\\Users\\Isaac\\.nuget\\packages\\",
-      "outputPath": "D:\\coding\\c#\\Expa V4\\Expa-Redesign\\obj\\",
+      "outputPath": "d:\\coding\\c#\\Expa V4\\Expa-Redesign\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

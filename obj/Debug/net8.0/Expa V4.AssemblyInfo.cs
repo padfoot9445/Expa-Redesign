@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Expa V4")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+25f9aedb430a9aa5b60bd31e71aa83d905f2b057")]
 [assembly: System.Reflection.AssemblyProductAttribute("Expa V4")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Expa V4")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

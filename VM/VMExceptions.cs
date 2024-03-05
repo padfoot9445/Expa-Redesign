@@ -28,9 +28,15 @@ class ExpaIR_OutOfMemoryException : ExpaIRException
 }
 class ExpaIR_MallocError: ExpaIR_OutOfMemoryException
 {
-    private protected new static string PrependedMessage = "Malloc faile\n: ";
+    private protected new static string PrependedMessage = "Malloc failed\n: ";
 }
 class MemoryAddressAccessException: ExpaIRException
 {
     public MemoryAddressAccessException(string message) : base(AddCustomMessage(message)) { }
+}
+class ExpaIR_ProgramAccessException: ExpaIRException
+{
+    private protected new static string PrependedMessage = "Program acces failed:\n";
+    public ExpaIR_ProgramAccessException(string message) : base(AddCustomMessage(message)) { }
+
 }
